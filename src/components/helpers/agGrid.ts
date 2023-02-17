@@ -1,5 +1,6 @@
-import { SideBarDef, ValueFormatterParams, ValueGetterParams } from 'ag-grid-community';
+import { ValueFormatterParams, ValueGetterParams } from 'ag-grid-community';
 import moment from 'moment';
+import CustomTooltip from './CustomTooltip';
 
 /**
  * Sets the ag-grid theme based on the selected theme in the app
@@ -68,47 +69,12 @@ export const capitalizeLetterCellFormatter = (params: ValueFormatterParams) => {
     return params.value;
 };
 
-/**
- * Setting ag-grid default status panel definitions
- */
-export const DefaultStatusPanelDef = {
-    statusPanels: [
-        {
-            statusPanel: 'agAggregationComponent',
-            statusPanelParams: {
-                // possible values are: 'count', 'sum', 'min', 'max', 'avg'
-                aggFuncs: ['avg', 'sum', 'min', 'max']
-            }
-        }
-    ]
-};
-
-/**
- * Setting ag-grid default side bar definitions
- */
-export const DefaultSideBarDef: SideBarDef = {
-    toolPanels: [
-        {
-            id: 'columns',
-            labelDefault: 'Columns',
-            labelKey: 'columns',
-            iconKey: 'columns',
-            toolPanel: 'agColumnsToolPanel',
-            toolPanelParams: {
-                suppressPivotMode: true,
-                suppressValues: true
-            }
-        },
-        {
-            id: 'filters',
-            labelDefault: 'Filters',
-            labelKey: 'filters',
-            iconKey: 'filter',
-            toolPanel: 'agFiltersToolPanel'
-        }
-    ],
-    position: 'right'
-};
+export const capitalizeFirstLetterCellFormatter = (params: ValueFormatterParams) => {
+    if (params.value) {
+        return params.value.charAt(0).toUpperCase() + params.value.slice(1);
+    }
+    return params.value;
+}
 
 /**
  * Setting ag-grid default column definitions
@@ -118,4 +84,7 @@ export const DefaultColumnDef = {
     sortable: true,
     resizable: true,
     filter: true,
+    editable: true,
+    flex: 1,
+    tooltipComponent: CustomTooltip,
 };

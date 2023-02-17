@@ -1,15 +1,10 @@
-.test-grid {
-    flex-grow: 1;
-}
-
-.test-container {
+.container {
     height: 100%;
     display: flex;
-    flex-direction: column;
+    width: 100% !important;
 }
 
-.test-header {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 13px;
-    margin-bottom: 1rem;
+.ag-header-cell-label {
+    display: flex;
+    justify-content: space-between;
 }
