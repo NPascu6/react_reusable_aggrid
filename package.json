@@ -1,6 +1,6 @@
 {
   "name": "react_reusable_aggrid_v1",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "React customizable aggrid.",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
