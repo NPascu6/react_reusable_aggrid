@@ -1,6 +1,6 @@
 {
   "name": "react_reusable_aggrid_v1",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "React customizable aggrid.",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
@@ -33,6 +33,7 @@
     "@rollup/plugin-typescript": "^11.0.0",
     "ag-grid-community": "^29.1.0",
     "ag-grid-react": "^29.1.0",
+    "moment": "^2.29.4",
     "rollup": "^3.16.0",
     "rollup-plugin-dts": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
