@@ -1,0 +1,41 @@
+{
+  "name": "react_reusable_aggrid_v1",
+  "version": "0.0.8",
+  "description": "React customizable aggrid.",
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
+  "types": "./lib/esm/index.d.ts",
+  "repository": "https://github.com/NPascu6/react_reusable_aggrid",
+  "author": "Pascu Norbert",
+  "license": "MIT",
+  "private": false,
+  "files": [
+    "lib"
+  ],
+  "devDependencies": {
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^4.9.5"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "dependencies": {
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "ag-grid-community": "^29.1.0",
+    "ag-grid-react": "^29.1.0",
+    "rollup": "^3.16.0",
+    "rollup-plugin-dts": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2"
+  }
+}
