@@ -1,7 +1,8 @@
 import React, { useCallback, useMemo } from 'react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import './styles.css';
+import '..styles/iconStyles.css';
+import '..styles/gridStyles.css';
 import {
     ColDef,
     GridApi,
@@ -17,11 +18,11 @@ import CustomTooltip from '../helpers/CustomTooltip';
 
 const DefaultColumnDef = {
     enableCellChangeFlash: true,
-    sortable: true,
-    resizable: true,
-    filter: true,
     editable: true,
+    sortable: true,
     flex: 1,
+    filter: true,
+    resizable: true,
     tooltipComponent: CustomTooltip,
 };
 
@@ -38,7 +39,9 @@ interface AGGridProps {
     containerStyle?: React.CSSProperties;
     tooltipField?: string;
     rowHeight?: number;
+    suppressMenu?: boolean;
     enableRangeSelection?: boolean;
+    showHeaderFilterIcon?: boolean;
     onCellEditingStarted?: (event: CellEditingStartedEvent) => void;
     onCellEditingStopped?: (event: CellEditingStoppedEvent) => void;
 }
@@ -92,8 +95,7 @@ interface AGGridProps {
  *  @param headerClass?=(params: any) => string | string[],
  *  @param menuIcon:string,
  *  @param toolPanel:string,
- *  @param toolPanelParams?:any,
- * 
+ *  @param toolPanelParams?:any
 
  * }
 
@@ -157,8 +159,9 @@ const AGGridComponent = (props: AGGridProps) => {
                 cellFlashDelay={1000}
                 columnDefs={props?.getColumnDefs}
                 getRowId={getRowId}
-                tooltipShowDelay={0}
+                tooltipShowDelay={150}
                 ensureDomOrder={true}
+                suppressMenuHide={props?.showHeaderFilterIcon ?? true}
                 rowSelection={'single'}
                 onGridReady={onGridReady}
                 onCellEditingStarted={onCellEditingStarted ?? null}

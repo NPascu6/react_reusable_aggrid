@@ -1,0 +1,39 @@
+.container {
+    height: 100%;
+    display: flex;
+    width: 100% !important;
+}
+
+.ag-theme-alpine {
+    font-family: 'Verlag, Helvetica, Arial, sans-serif';
+}
+
+.ag-cell-label-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.ag-cell-label-container:nth-child(2) {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.ag-header-cell-label {
+    display: flex;
+}
+
+.ag-header-cell-label .ag-header-cell-text {
+    justify-self: flex-start;
+}
+
+.ag-header-cell-label .ag-sort-indicator-container {
+    justify-self: flex-end;
+}
+
+.ag-cell {
+    font-size: 13;
+}
+
+.active {
+    color: #001489;
+}
