@@ -1,6 +1,6 @@
 {
   "name": "react_reusable_aggrid_v1",
-  "version": "0.1.106",
+  "version": "0.1.107",
   "description": "React customizable aggrid.",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
@@ -51,6 +51,7 @@
     "@rollup/plugin-replace": "^5.0.2",
     "jest-environment-jsdom": "^29.4.3",
     "postcss": "^8.2.15",
+    "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-svg-import": "^2.0.0",
     "tslib": "^2.5.0"
   }
