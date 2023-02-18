@@ -1,8 +1,9 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import '..styles/iconStyles.css';
-import '..styles/gridStyles.css';
+import '../styles/iconStyles.css';
+import '../styles/gridStyles.css';
+
 import {
     ColDef,
     GridApi,
@@ -12,19 +13,11 @@ import {
     GridReadyEvent,
     CellEditingStartedEvent,
     CellEditingStoppedEvent,
+    FilterChangedEvent,
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import CustomTooltip from '../helpers/CustomTooltip';
-
-const DefaultColumnDef = {
-    enableCellChangeFlash: true,
-    editable: true,
-    sortable: true,
-    flex: 1,
-    filter: true,
-    resizable: true,
-    tooltipComponent: CustomTooltip,
-};
+import customHeader from '../helpers/CustomHeader';
 
 interface AGGridProps {
     items: any[];
@@ -42,6 +35,7 @@ interface AGGridProps {
     suppressMenu?: boolean;
     enableRangeSelection?: boolean;
     showHeaderFilterIcon?: boolean;
+    onFilterChanged?: (event: FilterChangedEvent) => void;
     onCellEditingStarted?: (event: CellEditingStartedEvent) => void;
     onCellEditingStopped?: (event: CellEditingStoppedEvent) => void;
 }
@@ -101,6 +95,7 @@ interface AGGridProps {
 
  * ---------------------------------------------------------------------------------------------------------------------
 
+ * @param onFilterChanged?=(event: FilterChangedEvent) => void, method with param event for filter change contains property data of the row.
  * @param onCellEditingStarted?=(event: CellEditingStartedEvent) => void, method with param event for cell editing start contains property data of the row.
  * @param onCellEditingStopped?=(event: CellEditingStoppedEvent) => void,
  * @param rowKey: string - row id (unique key - property name)
@@ -112,9 +107,31 @@ interface AGGridProps {
  * @param containerStyle?: React.CSSProperties - style for the container
  */
 const AGGridComponent = (props: AGGridProps) => {
-    const [, setGridApi] = React.useState<GridApi | undefined>();
+    const [gridApi, setGridApi] = React.useState<GridApi | undefined>();
     const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
     const gridStyle = useMemo(() => ({ height: '100%', width: '100%', padding: '0.5em' }), []);
+    const [filters, setFilters] = useState<any>({}); // filters state
+
+    useEffect(() => {
+        if (gridApi) {
+            const filters = gridApi.getFilterModel();
+            setFilters(filters);
+            console.log(filters)
+        }
+    }, [gridApi]);
+
+    const DefaultColumnDef = {
+        enableCellChangeFlash: true,
+        editable: true,
+        sortable: true,
+        flex: 1,
+        filter: true,
+        resizable: true,
+        tooltipComponent: CustomTooltip,
+        headerComponentParams: {
+            filters: filters,
+        },
+    };
 
     /**
      * Sets row id to each row in the ag grid
@@ -148,6 +165,19 @@ const AGGridComponent = (props: AGGridProps) => {
         return props.rowStyle ?? { ...params.data.style };
     }, [props.rowStyle]);
 
+    const onFilterChanged = useCallback((event: FilterChangedEvent) => {
+        const filters = event.api.getFilterModel();
+        setFilters(filters);
+    }, []);
+
+    const components = useMemo<{
+        [p: string]: any;
+    }>(() => {
+        return {
+            agColumnHeader: customHeader,
+        };
+    }, []);
+
     return <div style={props.containerStyle ?? containerStyle}>
         <div style={props?.gridStyle ?? gridStyle} className="ag-theme-alpine">
             <AgGridReact
@@ -163,15 +193,17 @@ const AGGridComponent = (props: AGGridProps) => {
                 ensureDomOrder={true}
                 suppressMenuHide={props?.showHeaderFilterIcon ?? true}
                 rowSelection={'single'}
+                onFilterChanged={props.onFilterChanged ?? onFilterChanged}
                 onGridReady={onGridReady}
                 onCellEditingStarted={onCellEditingStarted ?? null}
                 onCellEditingStopped={onCellEditingStopped ?? null}
                 getRowStyle={getRowStyle}
+                animateRows={true}
+                defaultColDef={DefaultColumnDef}
+                components={components}
                 overlayLoadingTemplate={
                     props?.loadingMessage ?? '<span class="ag-overlay-loading-center">Please wait, loading...</span>'
                 }
-                animateRows={true}
-                defaultColDef={DefaultColumnDef}
             >
             </AgGridReact>
         </div>

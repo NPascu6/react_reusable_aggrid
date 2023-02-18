@@ -1,10 +1,23 @@
+.icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.icon-container {
+   padding: 2px;
+}
+
 .ag-theme-alpine .ag-icon-aggregation {
     background: transparent url('https://www.ag-grid.com/example-assets/svg-icons/aggregation.svg') center/contain no-repeat;
     color: transparent;
 }
 
 .ag-theme-alpine .ag-icon-arrows {
-    background: transparent url('https://www.ag-grid.com/example-assets/svg-icons/arrows.svg') center/contain no-repeat;
+    background: transparent url('../assets/sort-filter.svg') center/contain no-repeat;
     color: transparent;
 }
 

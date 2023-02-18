@@ -8,7 +8,7 @@ const Tootltip = (props: ITooltipParams & { color: string }) => {
     );
 
     return (
-        <>
+        <div className='tooltip'>
             {
                 Object.keys(data).map((key) => {
                     return (
@@ -18,7 +18,7 @@ const Tootltip = (props: ITooltipParams & { color: string }) => {
                     )
                 })
             }
-        </>
+        </div>
     );
 };
 
