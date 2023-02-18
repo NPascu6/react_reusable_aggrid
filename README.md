@@ -1,7 +1,10 @@
 ﻿# react_reusable_aggrid
 
-React AGGrid component, to which we can pass dynamic props. I've encapsulated most of the initial typescript config from:
-<https://www.ag-grid.com/react-data-grid/getting-started/>
+React AGGrid component, to which we can pass dynamic props. 
+I've encapsulated most of the initial typescript config from <https://www.ag-grid.com/react-data-grid/getting-started/>
+here you can also find more docs about how AGGrid works.
+
+You can uses ColDef | ColGroupDef from aggrid comunity if you need the type: https://www.npmjs.com/package/ag-grid-community
 
 ## ---------------------------------------------------------------------------------------------------
 
@@ -18,7 +21,7 @@ React AGGrid component, to which we can pass dynamic props. I've encapsulated mo
 ## @param getColumnDefs: (ColDef | ColGroupDef)[]  
 ==column definitions for the grid==
 
-~~
+~~~json
 
 {
 
@@ -64,7 +67,7 @@ React AGGrid component, to which we can pass dynamic props. I've encapsulated mo
 
  }
  
-~~ 
+~~~
 
 ## -----------------------------------------------------------------------------------------------------
 
