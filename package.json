@@ -1,6 +1,6 @@
 {
   "name": "react_reusable_aggrid_v1",
-  "version": "0.1.110",
+  "version": "0.1.111",
   "description": "React customizable aggrid.",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
@@ -58,6 +58,7 @@
   "dependencies": {
     "jest-environment-jsdom": "^29.4.3",
     "postcss": "^8.4.21",
+    "postcss-url": "^10.1.3",
     "tslib": "^2.5.0"
   }
 }
