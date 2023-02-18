@@ -18,6 +18,8 @@ React AGGrid component, to which we can pass dynamic props. I've encapsulated mo
 ## @param getColumnDefs: (ColDef | ColGroupDef)[]  
 ==column definitions for the grid==
 
+~~
+
 {
 
  @param headerName:string Name to be shown as header.
@@ -61,6 +63,8 @@ React AGGrid component, to which we can pass dynamic props. I've encapsulated mo
  @param toolPanelParams?:any
 
  }
+ 
+~~ 
 
 ## -----------------------------------------------------------------------------------------------------
 
