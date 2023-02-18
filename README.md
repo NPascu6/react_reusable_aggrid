@@ -61,9 +61,6 @@ You can uses ColDef | ColGroupDef from aggrid comunity if you need the type: htt
  @param cellClass?=(params: any) => string | string[]
  @param children?=(ColDef | ColGroupDef)[]
  @param headerClass?=(params: any) => string | string[]
- @param menuIcon:string
- @param toolPanel:string
- @param toolPanelParams?:any
 
  }
  
