@@ -1,0 +1,115 @@
+@font-face {
+  font-family: 'Verlag';
+  src: url('./VerlagSSm-ExtraLight.eot?#iefix');
+  src: url('./VerlagSSm-ExtraLight.eot?#iefix') format('eot'),
+    url('./VerlagSSm-ExtraLight.woff2') format('woff2'),
+    url('./VerlagSSm-ExtraLight.woff') format('woff'),
+    url('./VerlagSSm-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Verlag';
+  src: url('./VerlagSSm-ExtraLightItalic.eot?#iefix');
+  src: url('./VerlagSSm-ExtraLightItalic.eot?#iefix') format('eot'),
+    url('./VerlagSSm-ExtraLightItalic.woff2') format('woff2'),
+    url('./VerlagSSm-ExtraLightItalic.woff') format('woff'),
+    url('./VerlagSSm-ExtraLightItalic.ttf') format('truetype');
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Verlag';
+  src: url('./VerlagSSm-Light.eot?#iefix');
+  src: url('./VerlagSSm-Light.eot?#iefix') format('eot'),
+    url('./VerlagSSm-Light.woff2') format('woff2'), url('./VerlagSSm-Light.woff') format('woff'),
+    url('./VerlagSSm-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Verlag';
+  src: url('./VerlagSSm-LightItalic.eot?#iefix');
+  src: url('./VerlagSSm-LightItalic.eot?#iefix') format('eot'),
+    url('./VerlagSSm-LightItalic.woff2') format('woff2'),
+    url('./VerlagSSm-LightItalic.woff') format('woff'),
+    url('./VerlagSSm-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Verlag';
+  src: url('./VerlagSSm-Book.eot?#iefix');
+  src: url('./VerlagSSm-Book.eot?#iefix') format('eot'),
+    url('./VerlagSSm-Book.woff2') format('woff2'), url('./VerlagSSm-Book.woff') format('woff'),
+    url('./VerlagSSm-Book.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Verlag';
+  src: url('./VerlagSSm-BookItalic.eot?#iefix');
+  src: url('./VerlagSSm-BookItalic.eot?#iefix') format('eot'),
+    url('./VerlagSSm-BookItalic.woff2') format('woff2'),
+    url('./VerlagSSm-BookItalic.woff') format('woff'),
+    url('./VerlagSSm-BookItalic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Verlag';
+  src: url('./VerlagSSm-Black.eot?#iefix');
+  src: url('./VerlagSSm-Black.eot?#iefix') format('eot'),
+    url('./VerlagSSm-Black.woff2') format('woff2'), url('./VerlagSSm-Black.woff') format('woff'),
+    url('./VerlagSSm-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Verlag';
+  src: url('./VerlagSSm-Bold.eot?#iefix');
+  src: url('./VerlagSSm-Bold.eot?#iefix') format('eot'),
+    url('./VerlagSSm-Bold.woff2') format('woff2'), url('./VerlagSSm-Bold.woff') format('woff'),
+    url('./VerlagSSm-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Verlag';
+  src: url('./VerlagSSm-BoldItalic.eot?#iefix');
+  src: url('./VerlagSSm-BoldItalic.eot?#iefix') format('eot'),
+    url('./VerlagSSm-BoldItalic.woff2') format('woff2'),
+    url('./VerlagSSm-BoldItalic.woff') format('woff'),
+    url('./VerlagSSm-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Verlag';
+  src: url('./VerlagSSm-BlackItalic.eot?#iefix');
+  src: url('./VerlagSSm-BlackItalic.eot?#iefix') format('eot'),
+    url('./VerlagSSm-BlackItalic.woff2') format('woff2'),
+    url('./VerlagSSm-BlackItalic.woff') format('woff'),
+    url('./VerlagSSm-BlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}

@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import '../styles/iconStyles.css';
 import '../styles/gridStyles.css';
+import '../fonts/fonts.css';
 
 import {
     ColDef,
@@ -14,14 +15,46 @@ import {
     CellEditingStartedEvent,
     CellEditingStoppedEvent,
     FilterChangedEvent,
+    RowStyle,
+    ITooltipParams,
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import CustomTooltip from '../helpers/CustomTooltip';
 import customHeader from '../helpers/CustomHeader';
+import CustomPagination, { setLastButtonDisabled, setText } from '../helpers/CustomPagination';
+import CustomFilterMenu from '../helpers/CustomFilterMenu';
 
+/**
+ * Aggrid props
+ * @param items: any[] - data to be displayed in the grid
+ * @param rowStyle?: React.CSSProperties - style for the row
+ * @param getColumnDefs: (ColDef | ColGroupDef)[] - column definitions for the grid
+ * @param rowKey: string - key for the row
+ * @param onRowSelected?: any - callback for row selection
+ * @param showPagination?: boolean - show pagination
+ * @param defaultRowsPerPage?: number - default rows per page
+ * @param loadingMessage?: string - loading message
+ * @param gridStyle?: React.CSSProperties - style for the grid
+ * @param containerStyle?: React.CSSProperties - style for the container
+ * @param tooltipField?: string - field for the tooltip
+ * @param rowHeight?: number - row height
+ * @param cancelFilterIcon?: any - cancel filter icon
+ * @param suppressMenu?: boolean - suppress menu
+ * @param showLoadingOverlay?: boolean - show loading overlay
+ * @param enableRangeSelection?: boolean - enable range selection
+ * @param showHeaderFilterIcon?: boolean - show header filter icon
+ * @param noRowsMessage?: string - no rows message
+ * @param openFilterMenuOnHeaderClick?: boolean - open filter menu on header click
+ * @param customTooltip?: (params: ITooltipParams) => JSX.Element - custom tooltip
+ * @param customHeader?: (props: ITooltipParams & { color: string }) => JSX.Element - custom header
+ * @param onFilterChanged?: (event: FilterChangedEvent) => void - callback for filter change
+ * @param onCellEditingStarted?: (event: CellEditingStartedEvent) => void - callback for cell editing started
+ * @param onCellEditingStopped?: (event: CellEditingStoppedEvent) => void - callback for cell editing stopped
+ * @param headerComponentStyle?: CSSProperties - style for the header component
+ */
 interface AGGridProps {
     items: any[];
-    rowStyle?: React.CSSProperties;
+    rowStyle?: RowStyle;
     getColumnDefs: (ColDef | ColGroupDef)[];
     rowKey: string;
     onRowSelected?: any
@@ -32,9 +65,18 @@ interface AGGridProps {
     containerStyle?: React.CSSProperties;
     tooltipField?: string;
     rowHeight?: number;
+    cancelFilterIcon?: any;
     suppressMenu?: boolean;
+    showLoadingOverlay?: boolean;
     enableRangeSelection?: boolean;
     showHeaderFilterIcon?: boolean;
+    noRowsMessage?: string;
+    openFilterMenuOnHeaderClick?: boolean;
+    headerComponentStyle?: CSSProperties;
+    customTooltip?: (params: ITooltipParams) => JSX.Element;
+    customHeader?: (props: ITooltipParams & {
+        color: string;
+    }) => JSX.Element;
     onFilterChanged?: (event: FilterChangedEvent) => void;
     onCellEditingStarted?: (event: CellEditingStartedEvent) => void;
     onCellEditingStopped?: (event: CellEditingStoppedEvent) => void;
@@ -105,33 +147,44 @@ interface AGGridProps {
  * @param loadingMessage?: string - loading message
  * @param gridStyle?: React.CSSProperties - style for the grid
  * @param containerStyle?: React.CSSProperties - style for the container
+ * @param cancelFilterIcon?: any - cancel filter icon
+ * @param showHeaderFilterIcon?: boolean - show filter icon in header
+ * @param openFilterMenuOnHeaderClick?: boolean - open filter menu on header click
+ * @param customHeader?: React.component - custom header
+ * @param customTooltip?: React.component - custom tooltip
+ * @param noRowsMessage?: string - no rows message
  */
 const AGGridComponent = (props: AGGridProps) => {
+    const gridRef = useRef<AgGridReact<any>>(null);
     const [gridApi, setGridApi] = React.useState<GridApi | undefined>();
-    const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
+    const containerStyle: CSSProperties = useMemo(() => ({ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }), []);
     const gridStyle = useMemo(() => ({ height: '100%', width: '100%', padding: '0.5em' }), []);
     const [filters, setFilters] = useState<any>({}); // filters state
+    const defaultRowStyle: RowStyle | undefined = useMemo(() => ({ cursor: 'pointer', backgroundColor: 'white' }), []);
 
     useEffect(() => {
         if (gridApi) {
             const filters = gridApi.getFilterModel();
             setFilters(filters);
-            console.log(filters)
         }
     }, [gridApi]);
 
-    const DefaultColumnDef = {
+    const DefaultColumnDef = useMemo(() => ({
         enableCellChangeFlash: true,
         editable: true,
         sortable: true,
         flex: 1,
-        filter: true,
         resizable: true,
-        tooltipComponent: CustomTooltip,
+        filter: CustomFilterMenu,
+        tooltipComponent: props.customTooltip ?? CustomTooltip,
         headerComponentParams: {
             filters: filters,
+            headerStyle: props.headerComponentStyle ?? { backgroundColor: 'white', height: '100%', width: '100%', opacity: '0.7', fontWeight: 'bold', color: 'black' },
+            cancelFilterIcon: props.cancelFilterIcon ?? 'fa-times',
+            showHeaderFilterIcon: props.showHeaderFilterIcon ?? true,
+            openFilterMenuOnHeaderClick: props.openFilterMenuOnHeaderClick ?? true,
         },
-    };
+    }), [filters, props.cancelFilterIcon, props.openFilterMenuOnHeaderClick, props.showHeaderFilterIcon, props.customTooltip, props.headerComponentStyle]);
 
     /**
      * Sets row id to each row in the ag grid
@@ -147,6 +200,7 @@ const AGGridComponent = (props: AGGridProps) => {
      */
     const onFirstDataRendered = useCallback((params: FirstDataRenderedEvent) => {
         params.api.sizeColumnsToFit();
+
     }, []);
 
     const onGridReady = useCallback((params: GridReadyEvent) => {
@@ -162,8 +216,8 @@ const AGGridComponent = (props: AGGridProps) => {
     }, []);
 
     const getRowStyle = useCallback((params: any) => {
-        return props.rowStyle ?? { ...params.data.style };
-    }, [props.rowStyle]);
+        return props.rowStyle ?? defaultRowStyle;
+    }, [defaultRowStyle, props.rowStyle]);
 
     const onFilterChanged = useCallback((event: FilterChangedEvent) => {
         const filters = event.api.getFilterModel();
@@ -174,13 +228,32 @@ const AGGridComponent = (props: AGGridProps) => {
         [p: string]: any;
     }>(() => {
         return {
-            agColumnHeader: customHeader,
+            agColumnHeader: props.customHeader ?? customHeader,
         };
+    }, [props.customHeader]);
+
+    const onPaginationChanged: any = useCallback(() => {
+        // Workaround for bug in events order
+        if (gridRef?.current?.api) {
+            setText(
+                '#lbLastPageFound',
+                gridRef.current!.api.paginationIsLastPageFound()
+            );
+            setText('#lbPageSize', gridRef.current!.api.paginationGetPageSize());
+            // we +1 to current page, as pages are zero based
+            setText(
+                '#lbCurrentPage',
+                gridRef.current!.api.paginationGetCurrentPage() + 1
+            );
+            setText('#lbTotalPages', gridRef.current!.api.paginationGetTotalPages());
+            setLastButtonDisabled(!gridRef.current!.api.paginationIsLastPageFound());
+        }
     }, []);
 
     return <div style={props.containerStyle ?? containerStyle}>
         <div style={props?.gridStyle ?? gridStyle} className="ag-theme-alpine">
             <AgGridReact
+                ref={gridRef}
                 onFirstDataRendered={onFirstDataRendered}
                 rowData={props.items}
                 rowHeight={props.rowHeight ?? 40}
@@ -197,19 +270,23 @@ const AGGridComponent = (props: AGGridProps) => {
                 onGridReady={onGridReady}
                 onCellEditingStarted={onCellEditingStarted ?? null}
                 onCellEditingStopped={onCellEditingStopped ?? null}
+                //suppressPaginationPanel={true}
                 getRowStyle={getRowStyle}
                 animateRows={true}
                 defaultColDef={DefaultColumnDef}
                 components={components}
+                onPaginationChanged={onPaginationChanged}
                 overlayLoadingTemplate={
                     props?.loadingMessage ?? '<span class="ag-overlay-loading-center">Please wait, loading...</span>'
+                }
+                overlayNoRowsTemplate={
+                    props?.noRowsMessage ?? '<span style="padding: 10px; border: 2px solid #444; background: lightgoldenrodyellow">This is a custom \'no rows\' overlay</span>'
                 }
             >
             </AgGridReact>
         </div>
+        <CustomPagination gridRef={gridRef} />
     </div>
-
-
 };
 
 export default AGGridComponent

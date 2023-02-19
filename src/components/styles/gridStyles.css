@@ -5,7 +5,7 @@
 }
 
 .ag-theme-alpine {
-    font-family: 'Verlag, Helvetica, Arial, sans-serif';
+    font-family: Verlag,Helvetica,Arial,sans-serif;
 }
 
 .ag-cell-label-container {
@@ -32,6 +32,26 @@
 
 .ag-cell {
     font-size: 13;
+}
+
+.ag-header-active {
+    color: #001489;
+    margin-top: '1em'
+}
+
+.ag-header-cell {
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: -0.05px;
+    line-height: 20px;
+    background-color: white;
+}
+
+.hover:hover {
+    font-weight: 600;
+    color: #001489;
+    font-size: 22px;
+    background-color: white;
 }
 
 .tooltip {

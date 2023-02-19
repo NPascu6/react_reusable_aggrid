@@ -1,18 +1,45 @@
 .icon {
-    display: inline-block;
+    display: block;
+    align-self: center;
+    justify-self: center;
     width: 16px;
     height: 16px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
+    color: black
+}
+
+.icon:hover {
+    display: block;
+    align-self: center;
+    justify-self: center;
+    width: 16px;
+    height: 16px;
+}
+
+.ag-paging-page-summary-panel .ag-icon {
+    color: black !important;
 }
 
 .icon-container {
-   padding: 2px;
+    padding: 2px;
 }
 
 .ag-theme-alpine .ag-icon-aggregation {
-    background: transparent url('https://www.ag-grid.com/example-assets/svg-icons/aggregation.svg') center/contain no-repeat;
+    background: transparent url('../assets/filter-icon.svg') center/contain no-repeat;
+    color: transparent;
+}
+
+.ag-theme-alpine .ag-icon-aggregation :hover {
+    background: transparent url('../assets/filterActive-icon.svg') center/contain no-repeat;
+    color: transparent;
+}
+
+.ag-theme-alpine .ag-icon-aggregation-active {
+    background: transparent url('../assets/filterActive-icon.svg') center/contain no-repeat;
+    color: transparent;
+}
+
+.ag-theme-alpine .ag-icon-aggregation-hover {
+    background: transparent url('../assets/filterHover-icon.svg') center/contain no-repeat;
     color: transparent;
 }
 
@@ -22,7 +49,42 @@
 }
 
 .ag-theme-alpine .ag-icon-asc {
+    background: transparent url('../assets/sortAscending-icon.svg') center/contain no-repeat;
+    color: transparent;
+}
+
+.ag-theme-alpine .ag-icon-asc:hover {
+    background: transparent url('../assets/sortHoverAscending-icon.svg') center/contain no-repeat;
+    color: transparent;
+}
+
+.ag-theme-alpine .ag-icon-asc-active {
+    background: transparent url('../assets/sortHoverAscending-icon.svg') center/contain no-repeat;
+    color: transparent;
+}
+
+.ag-theme-alpine .ag-icon-asc-active-header {
     background: transparent url('../assets/sortActiveAscending-icon.svg') center/contain no-repeat;
+    color: transparent;
+}
+
+.ag-theme-alpine .ag-icon-desc {
+    background: transparent url('../assets/sortDescending-icon.svg') center/contain no-repeat;
+    color: transparent;
+}
+
+.ag-theme-alpine .ag-icon-desc:hover {
+    background: transparent url('../assets/sortHoverDescending-icon.svg') center/contain no-repeat;
+    color: transparent;
+}
+
+.ag-theme-alpine .ag-icon-desc-active {
+    background: transparent url('../assets/sortHoverDescending-icon.svg') center/contain no-repeat;
+    color: transparent;
+}
+
+.ag-theme-alpine .ag-icon-desc-active-header {
+    background: transparent url('../assets/sortActiveDescending-icon.svg') center/contain no-repeat;
     color: transparent;
 }
 
@@ -93,11 +155,6 @@
 
 .ag-theme-alpine .ag-icon-data {
     background: transparent url('https://www.ag-grid.com/example-assets/svg-icons/data.svg') center/contain no-repeat;
-    color: transparent;
-}
-
-.ag-theme-alpine .ag-icon-desc {
-    background: transparent url('../assets/sortActiveDescending-icon.svg') center/contain no-repeat;
     color: transparent;
 }
 
