@@ -1,8 +1,8 @@
 import { Box } from '@mui/material';
 import { GridApi } from 'ag-grid-community';
 import React, { useEffect, useRef, useState } from 'react';
-import { colors } from '../colors/colors';
-import '../styles/headerStyles.css'
+import { colors } from '../../colors/colors';
+import '../../styles/headerStyles.css'
 
 const CustomHeader = (props: {
   showColumnMenu: (arg0: null) => void;
@@ -27,6 +27,14 @@ const CustomHeader = (props: {
   const [descSort, setDescSort] = useState('inactive');
   const refButton = useRef(null);
   const [hover, setHover] = useState(false);
+  let menu = null;
+  let sort = null;
+
+  useEffect(() => {
+    props.column.addEventListener('sortChanged', onSortChanged);
+    onSortChanged();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onMenuClicked = () => {
     props.showColumnMenu(refButton.current);
@@ -41,11 +49,6 @@ const CustomHeader = (props: {
     props.setSort(order, event.shiftKey);
   };
 
-  useEffect(() => {
-    props.column.addEventListener('sortChanged', onSortChanged);
-    onSortChanged();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const getClass = () => {
     if (hover) {
@@ -63,7 +66,6 @@ const CustomHeader = (props: {
     return 'ag-theme-alpine ag-icon-aggregation';
   }
 
-  let menu = null;
   if (props.enableMenu) {
     menu = (
       <div
@@ -76,7 +78,6 @@ const CustomHeader = (props: {
     );
   }
 
-  let sort = null;
   if (props.enableSorting) {
     sort = (
       <>

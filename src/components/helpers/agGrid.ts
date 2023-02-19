@@ -1,6 +1,6 @@
 import { ValueFormatterParams, ValueGetterParams } from 'ag-grid-community';
 import moment from 'moment';
-import CustomTooltip from './CustomTooltip';
+import CustomTooltip from '../grid/components/CustomTooltip';
 
 /**
  * Sets the ag-grid theme based on the selected theme in the app

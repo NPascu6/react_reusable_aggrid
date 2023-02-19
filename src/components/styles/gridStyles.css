@@ -1,11 +1,21 @@
+.ag-theme-alpine {
+    font-family: Verlag, Helvetica, Arial, sans-serif;
+    --ag-header-column-separator-display: block;
+    --ag-header-column-separator-height: 50%;
+    --ag-header-column-separator-width: 1px;
+    --ag-header-column-separator-color: lightgray;
+    --ag-header-column-resize-handle-display: block;
+    --ag-header-column-resize-handle-height: 25%;
+    --ag-header-column-resize-handle-width: 1px;
+    --ag-header-column-resize-handle-color: lightgray;
+    --ag-header-background-color: white;
+    --ag-alpine-active-color: #001489;
+}
+
 .container {
     height: 100%;
     display: flex;
     width: 100% !important;
-}
-
-.ag-theme-alpine {
-    font-family: Verlag,Helvetica,Arial,sans-serif;
 }
 
 .ag-cell-label-container {

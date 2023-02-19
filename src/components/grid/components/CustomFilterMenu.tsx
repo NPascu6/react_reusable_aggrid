@@ -3,10 +3,10 @@ import React, {
     useImperativeHandle,
     useState,
 } from 'react';
-import { IFilterParams } from 'ag-grid-community';
+import { IDoesFilterPassParams, IFilterParams } from 'ag-grid-community';
 import { Box, Button, Checkbox, Grid, IconButton } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import { colors } from '../colors/colors';
+import { colors } from '../../colors/colors';
 
 const CustomFilter = React.forwardRef((props: IFilterParams, ref: any) => {
     const [filterText, setFilterText] = useState<string | undefined>(undefined);
@@ -32,6 +32,37 @@ const CustomFilter = React.forwardRef((props: IFilterParams, ref: any) => {
     // expose AG Grid Filter Lifecycle callbacks
     useImperativeHandle(ref, () => {
         return {
+            doesFilterPass(params: IDoesFilterPassParams) {
+                const { api, colDef, column, columnApi, context } = props;
+                const { node } = params;
+
+                // make sure each word passes separately, ie search for firstname, lastname
+                let passed = true;
+                if (filterText) {
+                    filterText
+                        .toLowerCase()
+                        .split(' ')
+                        .forEach((filterWord) => {
+                            const value = props.valueGetter({
+                                api,
+                                colDef,
+                                column,
+                                columnApi,
+                                context,
+                                data: node.data,
+                                getValue: (field) => node.data[field],
+                                node,
+                            });
+
+                            if (value.toString().toLowerCase().indexOf(filterWord) < 0) {
+                                passed = false;
+                            }
+                        });
+                }
+
+                return passed;
+            },
+
             isFilterActive() {
                 return filterText != null && filterText !== '';
             },
@@ -108,10 +139,11 @@ const CustomFilter = React.forwardRef((props: IFilterParams, ref: any) => {
     }
 
     useEffect(() => {
+        debugger
         if (filterText)
             props.api.setQuickFilter(filterText);
-        else if (filterText === '' || !filterText)
-            props.api.setFilterModel('');
+        else
+            props.api.setQuickFilter('')
     }, [filterText, props.api]);
 
     const isChecked = (item: any): boolean | undefined => {
@@ -120,10 +152,10 @@ const CustomFilter = React.forwardRef((props: IFilterParams, ref: any) => {
     }
 
     return (
-        <Box sx={{ overflow: 'hidden' }}>
+        <Box sx={{ overflow: 'hidden', minWidth: '200px' }}>
             <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <IconButton
-                    sx={{ borderRadius: 0, color: filterActive === 'asc' ? colors.core.reflexBlue[100] : 'black' }}
+                    sx={{ borderRadius: 0, color: filterActive === 'asc' ? colors.core.reflexBlue[100] : 'black', '&:hover': { color: colors.core.reflexBlue[100] } }}
                     onMouseEnter={() => setHover('asc')}
                     onMouseLeave={() => setHover('')}
                     className='icon-container'
@@ -133,7 +165,7 @@ const CustomFilter = React.forwardRef((props: IFilterParams, ref: any) => {
                     <span style={{ fontSize: '12px' }}>A-Z/1-9</span>
                 </IconButton>
                 <IconButton
-                    sx={{ borderRadius: 0, color: filterActive === 'desc' ? colors.core.reflexBlue[100] : 'black' }}
+                    sx={{ borderRadius: 0, color: filterActive === 'desc' ? colors.core.reflexBlue[100] : 'black', '&:hover': { color: colors.core.reflexBlue[100] } }}
                     className='icon-container'
                     onMouseEnter={() => setHover('desc')}
                     onMouseLeave={() => setHover('')}
@@ -148,7 +180,8 @@ const CustomFilter = React.forwardRef((props: IFilterParams, ref: any) => {
             <Grid container sx={{ position: 'sticky', top: 0, backgroundColor: 'white', padding: '1em' }}>
                 <Grid container item xs={12}>
                     <TextField value={filterText ?? ''}
-                        sx={{ width: '100%', borderBottom: 'none' }}
+                        InputProps={{ disableUnderline: true, style: { borderRadius: '0' } }}
+                        sx={{ width: '100%', borderBottom: 'none', borderRadius: 0, backgroundColor: 'white' }}
                         onChange={onChange}
                         variant='filled'
                         size='small' placeholder='Search a value...' />
@@ -159,20 +192,24 @@ const CustomFilter = React.forwardRef((props: IFilterParams, ref: any) => {
             <div className='container' style={{ flexDirection: 'column', height: '20em', margin: 0, overflow: 'auto' }}>
                 {items?.map((item: any, index) => <Grid container key={index}>
                     <Grid item >
-                        <Checkbox size='small' checked={isChecked(item)} onChange={handleCheckbox} value={item.userId} />{item.email}
+                        <Checkbox sx={{ color: 'success' }} size='small' checked={isChecked(item)} onChange={handleCheckbox} value={item.userId} />{item.email}
                     </Grid>
                 </Grid>)}
             </div>
-            <Button
-                onClick={handleClearFilter}
-                sx={{
-                    color: 'white',
-                    justifyContent: 'center',
-                    width: '100%',
-                    border: '1px solid',
-                    backgroundColor: colors.core.reflexBlue[100],
-                    padding: '0.5em', '&:hover': { color: colors.core.reflexBlue[100], backgroundColor: 'white' }
-                }}>Clear Filter</Button>
+            <Box sx={{ padding: '0.5em' }}>
+                <Button
+                    disabled={!filterActive && filtered?.length === 0}
+                    onClick={handleClearFilter}
+                    sx={{
+                        color: 'white',
+                        borderRadius: 0,
+                        justifyContent: 'center',
+                        width: '100%',
+                        border: '1px solid',
+                        backgroundColor: !filterActive && filtered?.length === 0 ? 'gray' : colors.core.reflexBlue[100],
+                        padding: '0.2em', '&:hover': { color: colors.core.reflexBlue[100], backgroundColor: 'white' }
+                    }}>Clear Filter</Button>
+            </Box>
         </Box>
     );
 });

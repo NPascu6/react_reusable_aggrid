@@ -19,10 +19,12 @@ import {
     ITooltipParams,
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import CustomTooltip from '../helpers/CustomTooltip';
-import customHeader from '../helpers/CustomHeader';
-import CustomPagination, { setLastButtonDisabled, setText } from '../helpers/CustomPagination';
-import CustomFilterMenu from '../helpers/CustomFilterMenu';
+import CustomTooltip from './components/CustomTooltip';
+import customHeader from './components/CustomHeader';
+import CustomPagination, { setLastButtonDisabled } from './components/CustomPagination';
+import CustomFilterMenu from './components/CustomFilterMenu';
+import { ThemeProvider } from '@mui/material';
+import { theme } from '../styles/gridTheme';
 
 /**
  * Aggrid props
@@ -54,8 +56,10 @@ import CustomFilterMenu from '../helpers/CustomFilterMenu';
  */
 interface AGGridProps {
     items: any[];
-    rowStyle?: RowStyle;
     getColumnDefs: (ColDef | ColGroupDef)[];
+    gridApi?: GridApi;
+    setGridApi?: any;
+    rowStyle?: RowStyle;
     rowKey: string;
     onRowSelected?: any
     showPagination?: boolean;
@@ -161,6 +165,7 @@ const AGGridComponent = (props: AGGridProps) => {
     const gridStyle = useMemo(() => ({ height: '100%', width: '100%', padding: '0.5em' }), []);
     const [filters, setFilters] = useState<any>({}); // filters state
     const defaultRowStyle: RowStyle | undefined = useMemo(() => ({ cursor: 'pointer', backgroundColor: 'white' }), []);
+    const [paginationPageSize, setPaginationPageSize] = useState<number>(props.defaultRowsPerPage ?? 10);
 
     useEffect(() => {
         if (gridApi) {
@@ -200,12 +205,14 @@ const AGGridComponent = (props: AGGridProps) => {
      */
     const onFirstDataRendered = useCallback((params: FirstDataRenderedEvent) => {
         params.api.sizeColumnsToFit();
-
     }, []);
 
     const onGridReady = useCallback((params: GridReadyEvent) => {
         setGridApi(params.api);
-    }, []);
+        if (props.setGridApi) {
+            props.setGridApi(params.api);
+        }
+    }, [props]);
 
     const onCellEditingStarted = useCallback((event: CellEditingStartedEvent) => {
         console.log('cellEditingStarted', event);
@@ -232,61 +239,71 @@ const AGGridComponent = (props: AGGridProps) => {
         };
     }, [props.customHeader]);
 
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [paginationTotalPages, setPaginationTotalPages] = useState<number>(0);
+    const [lastPageFound, setLastPageFound] = useState<boolean>(false);
+
+
     const onPaginationChanged: any = useCallback(() => {
         // Workaround for bug in events order
         if (gridRef?.current?.api) {
-            setText(
-                '#lbLastPageFound',
-                gridRef.current!.api.paginationIsLastPageFound()
-            );
-            setText('#lbPageSize', gridRef.current!.api.paginationGetPageSize());
-            // we +1 to current page, as pages are zero based
-            setText(
-                '#lbCurrentPage',
-                gridRef.current!.api.paginationGetCurrentPage() + 1
-            );
-            setText('#lbTotalPages', gridRef.current!.api.paginationGetTotalPages());
-            setLastButtonDisabled(!gridRef.current!.api.paginationIsLastPageFound());
+            const paginationGetTotalPages = gridRef.current.api.paginationGetTotalPages()
+            const paginationGetCurrentPage = gridRef.current.api.paginationGetCurrentPage()
+            const paginationIsLastPageFound = gridRef.current.api.paginationIsLastPageFound()
+            setPaginationTotalPages(paginationGetTotalPages);
+            setCurrentPage(paginationGetCurrentPage + 1);
+            setLastPageFound(paginationIsLastPageFound);
+            setLastButtonDisabled(!paginationIsLastPageFound);
         }
     }, []);
 
-    return <div style={props.containerStyle ?? containerStyle}>
-        <div style={props?.gridStyle ?? gridStyle} className="ag-theme-alpine">
-            <AgGridReact
-                ref={gridRef}
-                onFirstDataRendered={onFirstDataRendered}
-                rowData={props.items}
-                rowHeight={props.rowHeight ?? 40}
-                pagination={props?.showPagination}
-                paginationPageSize={props?.defaultRowsPerPage ?? 10}
-                cellFlashDelay={1000}
-                columnDefs={props?.getColumnDefs}
-                getRowId={getRowId}
-                tooltipShowDelay={150}
-                ensureDomOrder={true}
-                suppressMenuHide={props?.showHeaderFilterIcon ?? true}
-                rowSelection={'single'}
-                onFilterChanged={props.onFilterChanged ?? onFilterChanged}
-                onGridReady={onGridReady}
-                onCellEditingStarted={onCellEditingStarted ?? null}
-                onCellEditingStopped={onCellEditingStopped ?? null}
-                //suppressPaginationPanel={true}
-                getRowStyle={getRowStyle}
-                animateRows={true}
-                defaultColDef={DefaultColumnDef}
-                components={components}
-                onPaginationChanged={onPaginationChanged}
-                overlayLoadingTemplate={
-                    props?.loadingMessage ?? '<span class="ag-overlay-loading-center">Please wait, loading...</span>'
-                }
-                overlayNoRowsTemplate={
-                    props?.noRowsMessage ?? '<span style="padding: 10px; border: 2px solid #444; background: lightgoldenrodyellow">This is a custom \'no rows\' overlay</span>'
-                }
-            >
-            </AgGridReact>
+    return <ThemeProvider theme={theme}>
+        <div style={props.containerStyle ?? containerStyle}>
+            <div style={props?.gridStyle ?? gridStyle} className="ag-theme-alpine">
+                <AgGridReact
+                    ref={gridRef}
+                    onFirstDataRendered={onFirstDataRendered}
+                    rowData={props.items}
+                    rowHeight={props.rowHeight ?? 40}
+                    pagination={props?.showPagination}
+                    paginationPageSize={paginationPageSize}
+                    cellFlashDelay={1000}
+                    columnDefs={props?.getColumnDefs}
+                    getRowId={getRowId}
+                    tooltipShowDelay={150}
+                    ensureDomOrder={true}
+                    suppressMenuHide={props?.showHeaderFilterIcon ?? true}
+                    rowSelection={'single'}
+                    onFilterChanged={props.onFilterChanged ?? onFilterChanged}
+                    onGridReady={onGridReady}
+                    onCellEditingStarted={onCellEditingStarted ?? null}
+                    onCellEditingStopped={onCellEditingStopped ?? null}
+                    suppressPaginationPanel={false}
+                    getRowStyle={getRowStyle}
+                    animateRows={true}
+                    defaultColDef={DefaultColumnDef}
+                    components={components}
+                    onPaginationChanged={onPaginationChanged}
+                    overlayLoadingTemplate={
+                        props?.loadingMessage ?? '<span class="ag-overlay-loading-center">Please wait, loading...</span>'
+                    }
+                    overlayNoRowsTemplate={
+                        props?.noRowsMessage ?? '<span style="padding: 10px; border: 2px solid #444; background: lightgoldenrodyellow">This is a custom \'no rows\' overlay</span>'
+                    }
+                >
+                </AgGridReact>
+            </div>
+            <CustomPagination
+                gridRef={gridRef}
+                pageSize={paginationPageSize}
+                setPaginationPageSize={setPaginationPageSize}
+                currentPage={currentPage}
+                totalPages={paginationTotalPages}
+                lastPageFound={lastPageFound}
+            />
         </div>
-        <CustomPagination gridRef={gridRef} />
-    </div>
+    </ThemeProvider>
+
 };
 
 export default AGGridComponent
