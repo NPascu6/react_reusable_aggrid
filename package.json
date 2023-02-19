@@ -1,6 +1,6 @@
 {
   "name": "react_reusable_aggrid_v1",
-  "version": "0.1.113",
+  "version": "0.1.114",
   "description": "React customizable aggrid.",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
@@ -17,6 +17,9 @@
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/material": "^5.11.9",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-image": "^3.0.2",
